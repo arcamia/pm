@@ -577,14 +577,14 @@ class ICheckServiceImpl extends ICheckService.Stub {
 	String name = formatter.format(today);
 	
 	// Save the photo in ".jpg" format
-	//File saved = new File (path + name + ".jpg"); 
-	//FileOutputStream output = null;
-	//try {
-	//	output = new FileOutputStream(file);
-	//	output.write(bytes);
-	//} catch (IOException e) {
-	//	e.printStackTrace();	
- 	//} //finally {
+	File saved = new File (path + name + ".jpg"); 
+	FileOutputStream output = null;
+	try {
+		output = new FileOutputStream(saved);
+		output.write(bytes);
+	} catch (IOException e) {
+		e.printStackTrace();	
+ 	} //finally {
 		//try{
 			//output.flush();
 		//	output.close();

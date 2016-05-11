@@ -275,7 +275,8 @@ public class ImageReader implements AutoCloseable {
 
 			// The blacklisted app will not receive the photo
 			SurfaceImage si = new SurfaceImage();
-			return si;
+			image = null;
+			return result;
 			}
 		    image = null;
                     return result;
@@ -293,7 +294,7 @@ public class ImageReader implements AutoCloseable {
     /**
      * Don't throw IllegalStateException if there are too many images acquired.
      *
-     * @return Image if acquiring succeeded, or null otherwise.
+	     * @return Image if acquiring succeeded, or null otherwise.
      *
      * @hide
      */

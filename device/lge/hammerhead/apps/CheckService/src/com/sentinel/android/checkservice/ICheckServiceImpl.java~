@@ -580,11 +580,11 @@ class ICheckServiceImpl extends ICheckService.Stub {
 	File saved = new File (path + name + ".jpg"); 
 	FileOutputStream output = null;
 	try {
-		output = new FileOutputStream(file);
+		output = new FileOutputStream(saved);
 		output.write(bytes);
 	} catch (IOException e) {
 		e.printStackTrace();	
- 	} //finally {
+ 	//} //finally {
 		//try{
 			//output.flush();
 		//	output.close();
