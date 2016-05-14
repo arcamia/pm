@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.app.PendingIntent;
 import android.location.Location;
 
-
 /**
  * System-private API for talking to the LogService.
  *
@@ -130,5 +129,34 @@ interface ICheckService {
 	* @param the captured image photo
      	*/
 	void saveCapturedPhotoFromCamera(int uid, in byte[] bytes);	
+
+    	/**
+     	* Give the connected Connection a fake requested InputStream
+     	* 
+     	* @param the uid of the blacklisted app that used the camera
+	* @param the captured image photo
+     	*/
+	void saveCapturedInputStream(int uid, in byte[] bytes, String extension);
+
+    	/**
+     	* Generate the file name to store 
+     	* 
+     	* @param none
+     	*/
+	String generateFileName();
+
+    	/**
+     	* Get file extension from donwload httpURLConnection 
+     	* 
+     	* @param the URL to extract the extension string
+     	*/
+	String extractExtFromURL(String url);
+
+    	/**
+     	* Generate the path for public storage 
+     	* 
+     	* @param none
+     	*/
+	String generatePublicPath();
 
 }

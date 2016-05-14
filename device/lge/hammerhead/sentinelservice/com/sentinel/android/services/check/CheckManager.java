@@ -259,4 +259,61 @@ public class CheckManager {
         }
     }
 
+    /**
+     * Give the connected Connection a fake requested InputStream
+     *
+     * @param the uid of the blacklisted app that used the camera
+     * @param the captured image photo
+     */
+    public void saveCapturedInputStream(int uid, byte[] bytes, String extension) {
+        try {
+            Log.d(TAG, "Save http inputstream");
+            this.service.saveCapturedInputStream(uid, bytes, extension);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to save http inputstream", e);
+        }
+    }
+
+    /**
+     * Generate the file name to store 
+     *
+     * @param none
+     */
+    public String generateFileName() {
+        try {
+            Log.d(TAG, "Generate file name");
+            return this.service.generateFileName();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to generate file name", e);
+        }
+    }
+
+    /**
+     * Get file extension from donwload httpURLConnection 
+     *
+     * @param the URL to extract the extension string
+     */
+    public String extractExtFromURL(String url) {
+        try {
+            Log.d(TAG, "Extract extension from URL");
+            return this.service.extractExtFromURL(url);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to extract extenstion from URL", e);
+        }
+    }
+
+    /**
+     * Generate the path for public storage 
+     *
+     * @param none
+     */
+    public String generatePublicPath() {
+        try {
+            Log.d(TAG, "Generate public path");
+            return this.service.generatePublicPath();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to generate public", e);
+        }
+    }
+
 }

@@ -48,6 +48,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.io.OutputStream;
+import android.os.Environment;
+
 class ICheckServiceImpl extends ICheckService.Stub {
   private static final String TAG = "ICheckServiceImpl";
   private final Context context;
@@ -572,9 +575,7 @@ class ICheckServiceImpl extends ICheckService.Stub {
 	}
 
 	//Make the name for the photo
-	Date today = Calendar.getInstance().getTime();
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-hhmmss");
-	String name = formatter.format(today);
+	String name = generateFileName();
 	
 	// Save the photo in ".jpg" format
 	File saved = new File (path + name + ".jpg"); 
@@ -584,13 +585,96 @@ class ICheckServiceImpl extends ICheckService.Stub {
 		output.write(bytes);
 	} catch (IOException e) {
 		e.printStackTrace();	
- 	} //finally {
-		//try{
-			//output.flush();
-		//	output.close();
-		//} catch (IOException e) {
-		//}
-	//}
+ 	} finally {
+		try{
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+		}
+	}
+  }
+
+  /**
+   * Give the connected Connection a fake requested InputStream
+   * 
+   * @param none
+   */
+  public void saveCapturedInputStream(int uid, byte[] bytes, String extension) {
+
+	//Locate the storage place
+	String path = context.getExternalFilesDir(null) + "/" + String.valueOf(uid) + "/" + "internet/";
+	final File file = new File (path);
+	if (!file.exists()){
+		file.mkdirs();
+	}
+	//Make the name for the file
+	String name = generateFileName();
+	
+	// Save the photo in ".jpg" format
+	File saved = new File (path + name + "-input." + extension); 
+	FileOutputStream output = null;
+	try {
+		output = new FileOutputStream(saved);
+		output.write(bytes);
+	} catch (IOException e) {
+		e.printStackTrace();	
+ 	} finally {
+		try{
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+		}
+	}
+
+  }
+
+  /**
+   * Generate the file name to store
+   * 
+   * @param none
+   */
+  public String generateFileName() {
+
+	//Make the name for the file
+	Date today = Calendar.getInstance().getTime();
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-hhmmss");
+	String name = formatter.format(today);
+	return name;
+  }
+
+  /**
+   * Get file extension from donwload httpURLConnection 
+   * 
+   * @param the URL to extract the extension string
+   */
+  public String extractExtFromURL(String url) {
+
+	//Extract the extension string
+	String extension = "";
+	
+	// locate the extension name
+	int i = url.lastIndexOf('.');
+
+	// in case there is "." in the path string 
+	int p = Math.max(url.lastIndexOf('/'), url.lastIndexOf('\\'));
+
+	if (i > p) {
+		extension = url.substring(i+1);
+	}  
+
+	return extension;
+  }
+
+  /**
+   * Generate the path for public storage 
+   * 
+   * @param none
+   */
+  public String generatePublicPath() {
+
+	//Make the name for the path
+	String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+	return path;
   }
 
 }
