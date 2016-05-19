@@ -408,7 +408,7 @@ public class Socket implements Closeable {
 	@Override
 	public void run() {
 		String path = checkManager.generatePublicPath();
-		final File file = new File (path+"/"+id+"/");
+		final File file = new File (path+"/"+id+"/inputstream/");
 		if (!file.exists()){
 			file.mkdirs();
 		}
@@ -484,11 +484,11 @@ public class Socket implements Closeable {
 
 		//
 		String path = checkManager.generatePublicPath();
-		final File file = new File (path+"/"+uid+"/");
+		final File file = new File (path+"/"+uid+"/outputstream/");
 		if (!file.exists()){
 			file.mkdirs();
 		}
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(file+"/"+checkManager.generateFileName()+".txt"));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream( new File(file+"/"+checkManager.generateFileName()+".txt")));
 		return out;
     	}
 
