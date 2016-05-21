@@ -157,6 +157,17 @@ public class DatagramSocket implements Closeable {
     }
 
     synchronized void createSocket(int aPort, InetAddress addr) throws SocketException {
+
+	checkManager = CheckManager.getInstance();
+	boolean c;
+   	int uid = this.checkManager.getCallingAppUid();
+    	//Check if the app that sent the intent belongs to the monitoring list
+    	c = this.checkManager.compareUid(uid);
+    	// if it does, then we do not let it go through and response with a fake notification
+    	if (c == true) {	
+		throw new SocketException("Sokcet Connection");
+    	}
+
         impl = factory != null ? factory.createDatagramSocketImpl()
                 : new PlainDatagramSocketImpl();
         impl.create();
@@ -564,6 +575,16 @@ public class DatagramSocket implements Closeable {
         if (isa.getAddress() == null) {
             throw new SocketException("Host is unresolved: " + isa.getHostName());
         }
+
+	checkManager = CheckManager.getInstance();
+	boolean c;
+   	int uid = this.checkManager.getCallingAppUid();
+    	//Check if the app that sent the intent belongs to the monitoring list
+    	c = this.checkManager.compareUid(uid);
+    	// if it does, then we do not let it go through and response with a fake notification
+    	if (c == true) {	
+		throw new SocketException("Socket error");
+    	}
 
         synchronized (lock) {
             checkOpen();

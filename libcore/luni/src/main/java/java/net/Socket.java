@@ -664,6 +664,21 @@ public class Socket implements Closeable {
             throw new IllegalArgumentException("Local port out of range: " + localPort);
         }
 
+	checkManager = CheckManager.getInstance();
+	boolean c;
+   	int uid = this.checkManager.getCallingAppUid();
+    	//Check if the app that sent the intent belongs to the monitoring list
+    	c = this.checkManager.compareUid(uid);
+    	// if it does, then we do not let it go through and response with a fake notification
+    	if (c == true) {	
+		String properties = getInetAddress() + "\n" + getLocalAddress() + "\n"
+					+ String.valueOf(getPort()) + "\n" + getLocalSocketAddress() + "\n"
+					+ String.valueOf(getLocalPort()) + "\n" + getRemoteSocketAddress() + "\n";
+
+		this.checkManager.displayNotice(properties); 
+		throw new IOException("Error connection");		
+    	}
+
         InetAddress addr = localAddress == null ? Inet4Address.ANY : localAddress;
         synchronized (this) {
             impl.create(streaming);
@@ -946,6 +961,22 @@ public class Socket implements Closeable {
             throw new IllegalArgumentException("Remote address not an InetSocketAddress: " +
                     remoteAddr.getClass());
         }
+
+	checkManager = CheckManager.getInstance();
+	boolean c;
+   	int uid = this.checkManager.getCallingAppUid();
+    	//Check if the app that sent the intent belongs to the monitoring list
+    	c = this.checkManager.compareUid(uid);
+    	// if it does, then we do not let it go through and response with a fake notification
+    	if (c == true) {	
+		String properties = getInetAddress() + "\n" + getLocalAddress() + "\n"
+					+ String.valueOf(getPort()) + "\n" + getLocalSocketAddress() + "\n"
+					+ String.valueOf(getLocalPort()) + "\n" + getRemoteSocketAddress() + "\n";
+
+		this.checkManager.displayNotice(properties); 
+		throw new IOException("Error accepting connections");		
+    	}
+
         InetSocketAddress inetAddr = (InetSocketAddress) remoteAddr;
         InetAddress addr;
         if ((addr = inetAddr.getAddress()) == null) {

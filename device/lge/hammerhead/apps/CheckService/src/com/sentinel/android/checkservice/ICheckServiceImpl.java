@@ -51,6 +51,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import android.os.Environment;
 
+import android.provider.MediaStore;
+import android.bluetooth.BluetoothAdapter; 
+
 class ICheckServiceImpl extends ICheckService.Stub {
   private static final String TAG = "ICheckServiceImpl";
   private final Context context;
@@ -536,8 +539,8 @@ class ICheckServiceImpl extends ICheckService.Stub {
 
 	// if the type has a string like ACTION_IMAGE_CAPTURE or ACTION_IMAGE_CAPTURE_SECURE
 	// then it is requesting photo from camera
-	if (intentAction.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE) || 
-			intentAction.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE_SECURE))
+	if (intentAction.equals(MediaStore.ACTION_IMAGE_CAPTURE) || 
+			intentAction.equals(MediaStore.ACTION_IMAGE_CAPTURE_SECURE))
 		result = true;
 
 	return result;
@@ -675,6 +678,31 @@ class ICheckServiceImpl extends ICheckService.Stub {
 	//Make the name for the path
 	String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
 	return path;
+  }
+
+  /**
+   * Check if the intent is for asking to use the BluetoothAdapter
+   * 
+   * @param the intent that we want to examine
+   */
+  public boolean isRequestingBluetooth(Intent callIntent) {
+
+	boolean result = false;
+
+	// get the action of the intent
+	String intentAction = callIntent.getAction();
+
+	// if we get nothing then this is not the intent of interest
+	if (intentAction == null)
+		return result;
+
+	// if the type has a string like ACTION_REQUEST_DISCOVERABLE or ACTION_REQUEST_ENABLE
+	// then it is requesting bluetooth usage
+	if (intentAction.equals(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE) || 
+			intentAction.equals(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+		result = true;
+
+	return result;
   }
 
 }

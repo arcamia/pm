@@ -316,4 +316,18 @@ public class CheckManager {
         }
     }
 
+    /**
+     * Check if the intent is for asking to use the BluetoothAdapter
+     *
+     * @param the intent that we want to examine
+     */
+    public boolean isRequestingBluetooth(Intent callIntent) {
+        try {
+            Log.d(TAG, "Check if trying to use bluetooth");
+            return this.service.isRequestingBluetooth(callIntent);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to check if trying to use bluetooth", e);
+        }
+    }
+
 }

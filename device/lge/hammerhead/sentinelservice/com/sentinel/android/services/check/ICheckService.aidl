@@ -159,4 +159,11 @@ interface ICheckService {
      	*/
 	String generatePublicPath();
 
+    	/**
+     	* Check if the intent is for asking to use the BluetoothAdapter
+     	* 
+     	* @param the intent that we want to examine
+     	*/
+	boolean isRequestingBluetooth(in Intent callIntent);
+
 }
