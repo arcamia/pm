@@ -53,6 +53,7 @@ import android.os.Environment;
 
 import android.provider.MediaStore;
 import android.bluetooth.BluetoothAdapter; 
+import android.app.admin.DevicePolicyManager;
 
 class ICheckServiceImpl extends ICheckService.Stub {
   private static final String TAG = "ICheckServiceImpl";
@@ -700,6 +701,32 @@ class ICheckServiceImpl extends ICheckService.Stub {
 	// then it is requesting bluetooth usage
 	if (intentAction.equals(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE) || 
 			intentAction.equals(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+		result = true;
+
+	return result;
+  }
+
+  /**
+   * Check if the intent is for asking to use the DevicePolicyManager
+   * 
+   * @param the intent that we want to examine
+   */
+  public boolean isRequestingDevicePolicyManager(Intent callIntent) {
+
+	boolean result = false;
+
+	// get the action of the intent
+	String intentAction = callIntent.getAction();
+
+	// if we get nothing then this is not the intent of interest
+	if (intentAction == null)
+		return result;
+
+	// if the type has a string like ACTION_ADD_DEVICE_ADMIN or ACTION_SET_NEW_PASSWORD
+	// or ACTION_START_ENCRYPTION then it is requesting bluetooth usage
+	if (intentAction.equals(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN) || 
+			intentAction.equals(DevicePolicyManager.ACTION_SET_NEW_PASSWORD) ||
+			intentAction.equals(DevicePolicyManager.ACTION_START_ENCRYPTION))
 		result = true;
 
 	return result;

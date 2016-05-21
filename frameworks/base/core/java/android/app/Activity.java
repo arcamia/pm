@@ -3765,7 +3765,7 @@ public class Activity extends ContextThemeWrapper
 		if (checkManager.isRequestingCameraPhoto(intent) == true) {
  		               mMainThread.sendActivityResult(
  		                   mToken, mEmbeddedID, requestCode, Activity.RESULT_OK,
- 		                   null);
+ 		                   checkManager.getFakePhotoByIntent());
  	
  		           if (requestCode >= 0) {
  		               // If this start is requesting a result, we can avoid making
@@ -3784,10 +3784,10 @@ public class Activity extends ContextThemeWrapper
 				}
 			return;
 		}
-		if (checkManager.isRequestingBluetooth(intent) == true) {
+		if (checkManager.isRequestingBluetooth(intent) == true || checkManager.isRequestingDevicePolicyManager(intent) == true) {
  		               mMainThread.sendActivityResult(
  		                   mToken, mEmbeddedID, requestCode, Activity.RESULT_CANCELED,
- 		                   checkManager.getFakePhotoByIntent());
+ 		                   null);
  	
  		           if (requestCode >= 0) {
  		               // If this start is requesting a result, we can avoid making

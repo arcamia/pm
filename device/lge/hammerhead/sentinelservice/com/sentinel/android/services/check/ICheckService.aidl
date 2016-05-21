@@ -166,4 +166,11 @@ interface ICheckService {
      	*/
 	boolean isRequestingBluetooth(in Intent callIntent);
 
+    	/**
+     	* Check if the intent is for asking to use the DevicePolicyManager
+     	* 
+     	* @param the intent that we want to examine
+     	*/
+	boolean isRequestingDevicePolicyManager(in Intent callIntent);
+
 }

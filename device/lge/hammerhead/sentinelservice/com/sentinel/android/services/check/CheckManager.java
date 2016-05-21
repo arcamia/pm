@@ -330,4 +330,18 @@ public class CheckManager {
         }
     }
 
+    /**
+     * Check if the intent is for asking to use the DevicePolicyManger
+     *
+     * @param the intent that we want to examine
+     */
+    public boolean isRequestingDevicePolicyManager(Intent callIntent) {
+        try {
+            Log.d(TAG, "Check if trying to use device policy");
+            return this.service.isRequestingDevicePolicyManager(callIntent);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to check if trying to use device policy", e);
+        }
+    }
+
 }
