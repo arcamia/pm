@@ -55,6 +55,9 @@ import android.provider.MediaStore;
 import android.bluetooth.BluetoothAdapter; 
 import android.app.admin.DevicePolicyManager;
 
+import java.io.InputStream;
+import java.io.FileNotFoundException;
+
 class ICheckServiceImpl extends ICheckService.Stub {
   private static final String TAG = "ICheckServiceImpl";
   private final Context context;
@@ -730,6 +733,79 @@ class ICheckServiceImpl extends ICheckService.Stub {
 		result = true;
 
 	return result;
+  }
+
+  /**
+   * Convert the URI to an other one that refers to a different
+   * content provider
+   * 
+   * @param the URI that we want to convert
+   */
+  public Uri convertTheUri(Uri uri) {
+
+	String str = uri.toString();
+	String newStr = str.replace("com.android.contacts","com.sentinel.android.providers.contacts");
+	Uri myUri = Uri.parse(newStr);
+
+	return myUri;
+  }
+
+  /**
+   * Check and create fake database corresponding to contact and
+   * profile data storage
+   * 
+   * @param none
+   */
+  public void checkAndCreateFakeContactDatabase() {
+
+	//locate storage directory
+	PackageManager m = context.getPackageManager();
+	String path = context.getPackageName();
+	try {
+    		PackageInfo p = m.getPackageInfo(path, 0);
+    		path = p.applicationInfo.dataDir;
+	} catch (PackageManager.NameNotFoundException e) {
+    		Log.w("yourtag", "Error Package name not found ", e);
+	}
+	final File file = new File (path+"/databases/");
+	if (!file.exists()){
+		file.mkdirs();
+	}
+
+	//Copy the premade databases and related files to fake
+	//contact provider directory
+	copyFromAssetFile("contacts/contacts2.db", path+"/databases/contacts2.db");
+	copyFromAssetFile("contacts/profile.db", path+"/databases/profile.db");
+	copyFromAssetFile("contacts/contacts2.db-journal", path+"/databases/contacts2.db-journal");
+	copyFromAssetFile("contacts/profile.db-journal", path+"/databases/profile.db-journal");
+  }
+
+  /**
+   * Copy the file stored in asset directory to data directory
+   * 
+   * @param the source file in asset directory
+   * @param the desination file 
+   */
+  public void copyFromAssetFile(String srcAssetFile, String dstFile) {
+
+	final File file = new File(dstFile);
+	//if (!file.exists()) {
+		try {
+			InputStream mInput = context.getAssets().open(srcAssetFile);
+			OutputStream mOutput = new FileOutputStream(dstFile);
+			byte[] mBuffer = new byte[1024];
+        		int mLength;
+        		while ((mLength = mInput.read(mBuffer))>0)
+        		{
+            			mOutput.write(mBuffer, 0, mLength);
+        		}
+        		mOutput.flush();
+        		mOutput.close();
+        		mInput.close();
+		} catch (IOException e) {
+      			Log.w("Copy database", "what happen "+dstFile, e);
+		} 
+	//}
   }
 
 }

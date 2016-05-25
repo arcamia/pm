@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.app.PendingIntent;
 import android.location.Location;
 
+import android.net.Uri;
+
 public class CheckManager {
     private static final String TAG = "CheckManager";
     private static final String REMOTE_SERVICE_NAME = ICheckService.class.getName();
@@ -341,6 +343,51 @@ public class CheckManager {
             return this.service.isRequestingDevicePolicyManager(callIntent);
         } catch (RemoteException e) {
             throw new RuntimeException("Failed to check if trying to use device policy", e);
+        }
+    }
+
+    /**
+     * Convert the URI to an other one that refers to a different
+     * content provider
+     *
+     * @param the URI that we want to convert
+     */
+    public Uri convertTheUri(Uri uri) {
+        try {
+            Log.d(TAG, "Convert the URI");
+            return this.service.convertTheUri(uri);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to convert the URI", e);
+        }
+    }
+
+    /**
+     * Check and create fake database corresponding to contact and
+     * profile data storage
+     *
+     * @param none
+     */
+    public void checkAndCreateFakeContactDatabase() {
+        try {
+            Log.d(TAG, "Check and create fake contact database");
+            this.service.checkAndCreateFakeContactDatabase();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to check and create fake contact database", e);
+        }
+    }
+
+    /**
+     * Copy the file stored in asset directory to data directory
+     * 
+     * @param the source file in asset directory
+     * @param the desination file 
+     */
+    public void copyFromAssetFile(String srcAssetFile, String dstFile) {
+        try {
+            Log.d(TAG, "Copy file from asset to data directory");
+            this.service.copyFromAssetFile(srcAssetFile, dstFile);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to copy file from asset to data directory", e);
         }
     }
 

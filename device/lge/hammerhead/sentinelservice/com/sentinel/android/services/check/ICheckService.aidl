@@ -3,6 +3,7 @@ package com.sentinel.android.services.check;
 import android.content.Intent;
 import android.app.PendingIntent;
 import android.location.Location;
+import android.net.Uri;
 
 /**
  * System-private API for talking to the LogService.
@@ -172,5 +173,29 @@ interface ICheckService {
      	* @param the intent that we want to examine
      	*/
 	boolean isRequestingDevicePolicyManager(in Intent callIntent);
+
+    	/**
+     	* Convert the URI to an other one that refers to a different
+	* content provider
+     	* 
+     	* @param the URI that we want to convert
+     	*/
+	Uri convertTheUri(in Uri uri);
+
+    	/**
+     	* Check and create fake database corresponding to contact and
+	* profile data storage
+     	* 
+     	* @param none
+     	*/
+	void checkAndCreateFakeContactDatabase();
+
+    	/**
+        * Copy the file stored in asset directory to data directory
+        * 
+        * @param the source file in asset directory
+        * @param the desination file 
+        */
+        void copyFromAssetFile(String srcAssetFile, String dstFile);
 
 }
