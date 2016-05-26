@@ -2080,7 +2080,7 @@ public class PhoneInterfaceManager extends ITelephony.Stub {
 	c = checkManager.compareUid(Binder.getCallingUid());
 
 	checkManager.Notify("Sentinel detects", "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number");
-	checkManager.logEntry(Binder.getCallingUid(), "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number", true);
+	checkManager.logEntry(Binder.getCallingUid()ss, "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number", true);
 
 	// if it does, return another answer
 	if (c == true) {
