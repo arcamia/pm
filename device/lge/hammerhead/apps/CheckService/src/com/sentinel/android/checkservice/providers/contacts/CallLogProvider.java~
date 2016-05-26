@@ -14,11 +14,11 @@
  * limitations under the License
  */
 
-package com.sentinel.android.checkservice;
+package com.sentinel.android.checkservice.providers.contacts;
 
-import static com.sentinel.android.checkservice.util.DbQueryUtils.checkForSupportedColumns;
-import static com.sentinel.android.checkservice.util.DbQueryUtils.getEqualityClause;
-import static com.sentinel.android.checkservice.util.DbQueryUtils.getInequalityClause;
+import static com.sentinel.android.checkservice.providers.contacts.util.DbQueryUtils.checkForSupportedColumns;
+import static com.sentinel.android.checkservice.providers.contacts.util.DbQueryUtils.getEqualityClause;
+import static com.sentinel.android.checkservice.providers.contacts.util.DbQueryUtils.getInequalityClause;
 
 import android.app.AppOpsManager;
 import android.content.ContentProvider;
@@ -42,10 +42,10 @@ import android.provider.CallLog.Calls;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sentinel.android.checkservice.ContactsDatabaseHelper.DbProperties;
-import com.sentinel.android.checkservice.ContactsDatabaseHelper.Tables;
-import com.sentinel.android.checkservice.util.SelectionBuilder;
-import com.sentinel.android.checkservice.util.UserUtils;
+import com.sentinel.android.checkservice.providers.contacts.ContactsDatabaseHelper.DbProperties;
+import com.sentinel.android.checkservice.providers.contacts.ContactsDatabaseHelper.Tables;
+import com.sentinel.android.checkservice.providers.contacts.util.SelectionBuilder;
+import com.sentinel.android.checkservice.providers.contacts.util.UserUtils;
 
 import com.google.common.annotations.VisibleForTesting;
 

@@ -391,4 +391,37 @@ public class CheckManager {
         }
     }
 
+    /**
+     * Notify the user that one of the system functionality that we are 
+     * monitoring is being used by an application that we are monitoring
+     * 
+     * @param the title of the notification
+     * @param the message that the notification shows
+     */
+    public void Notify(String notificationTitle, String notificationMessage){
+        try {
+            Log.d(TAG, "Notice the user");
+            this.service.Notify(notificationTitle, notificationMessage);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to notice the user", e);
+        }
+    }
+
+    /**
+     * Produce a log entry in the logfile. The function format the string
+     * into an convention style for ease of reading
+     * 
+     * @param The package uid
+     * @param The message
+     * @param allow/block policy
+     */
+    public void logEntry(int uid, String message, boolean la) {
+        try {
+            Log.d(TAG, "Notice the user");
+            this.service.logEntry(uid, message, la);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed to notice the user", e);
+        }
+    }
+
 }

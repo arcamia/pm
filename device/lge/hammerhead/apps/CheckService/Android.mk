@@ -17,10 +17,13 @@ LOCAL_JAVA_LIBRARIES += framework
 LOCAL_JAVA_LIBRARIES += telephony-common
 LOCAL_JAVA_LIBRARIES += ext
 
+
 # Only compile source java files in this apk.
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_SRC_FILES += \
         src/com/sentinel/android/checkservice/providers/contacts/EventLogTags.logtags
+LOCAL_SRC_FILES += \
+        src/com/sentinel/android/checkservice/providers/calendar/EventLogTags.logtags
 
 LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
 LOCAL_RESOURCE_DIR += $(addprefix $(LOCAL_PATH)/, $(res_dirs))
@@ -34,6 +37,7 @@ LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-gridlayout
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v13
 LOCAL_STATIC_JAVA_LIBRARIES += android-opt-bitmap
 LOCAL_STATIC_JAVA_LIBRARIES += com.android.vcard
+LOCAL_STATIC_JAVA_LIBRARIES += calendar-common
 
 LOCAL_AAPT_FLAGS := --auto-add-overlay
 LOCAL_AAPT_FLAGS += --extra-packages android.support.v7.appcompat:com.android.ex.chips:android.support.v7.gridlayout:com.android.bitmap

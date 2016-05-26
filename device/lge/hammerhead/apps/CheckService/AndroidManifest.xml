@@ -8,6 +8,26 @@
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
+    <uses-permission android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.cl" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SUBSCRIBED_FEEDS_READ" />
+    <uses-permission android:name="android.permission.SUBSCRIBED_FEEDS_WRITE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.UPDATE_APP_OPS_STATS" />
 
     <application android:name=".CheckServiceApp" android:persistent="true" android:theme="@style/Theme.AppCompat.Light">
         <uses-library android:name="com.sentinel.android.services.check" android:required="true"/>
@@ -16,6 +36,11 @@
          android:name=".NoticeActivity"
          android:label="CheckServiceApp" >
       </activity>
+
+     <activity android:name=".NotificationView"
+         android:label="Details of notification">
+      </activity>
+
 
         <provider android:name=".providers.contacts.FakeContactsProvider"
             android:authorities="com.sentinel.android.providers.contacts"
@@ -34,6 +59,14 @@
                     android:pathPattern="/contacts/.*/photo"
                     android:readPermission="android.permission.GLOBAL_SEARCH" />
             <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <provider android:name=".providers.contacts.FakeCallLogProvider"
+            android:authorities="com.sentinel.android.providers.contacts.call_log"
+            android:syncable="false" android:multiprocess="false"
+            android:exported="true"
+            android:readPermission="android.permission.READ_CALL_LOG"
+            android:writePermission="android.permission.WRITE_CALL_LOG">
         </provider>
 
         <activity android:name=".providers.contacts.debug.ContactsDumpActivity"
@@ -55,6 +88,64 @@
                 <action android:name="android.intent.action.PRE_BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+
+        <provider android:name=".providers.telephony.FakeTelephonyProvider"
+                  android:authorities="com.sentinel.android.providers.telephony.telephony"
+                  android:exported="true"
+                  android:singleUser="true"
+                  android:multiprocess="false" />
+
+        <!-- This is a singleton provider that is used by all users.
+             A new instance is not created for each user. And the db is shared
+             as well. -->
+        <provider android:name=".providers.telephony.FakeSmsProvider"
+                  android:authorities="com.sentinel.android.providers.telephony.sms"
+                  android:multiprocess="false"
+                  android:exported="true"
+                  android:singleUser="true"
+                  android:readPermission="android.permission.READ_SMS"
+                  android:writePermission="android.permission.WRITE_SMS" />
+
+        <!-- This is a singleton provider that is used by all users.
+             A new instance is not created for each user. And the db is shared
+             as well. -->
+        <provider android:name=".providers.telephony.FakeMmsProvider"
+                  android:authorities="com.sentinel.android.providers.telephony.mms"
+                  android:multiprocess="false"
+                  android:exported="true"
+                  android:singleUser="true"
+                  android:readPermission="android.permission.READ_SMS"
+                  android:writePermission="android.permission.WRITE_SMS">
+            <grant-uri-permission android:pathPrefix="/part/" />
+            <grant-uri-permission android:pathPrefix="/drm/" />
+        </provider>
+
+        <!-- This is a singleton provider that is used by all users.
+             A new instance is not created for each user. And the db is shared
+             as well. -->
+        <provider android:name=".providers.telephony.FakeMmsSmsProvider"
+                  android:authorities="com.sentinel.android.providers.telephony.mms-sms"
+                  android:multiprocess="false"
+                  android:exported="true"
+                  android:singleUser="true"
+                  android:readPermission="android.permission.READ_SMS"
+                  android:writePermission="android.permission.WRITE_SMS" />
+
+        <provider android:name=".providers.telephony.FakeHbpcdLookupProvider"
+                  android:authorities="com.sentinel.android.providers.telephony.hbpcd_lookup"
+                  android:exported="true"
+                  android:singleUser="true"
+                  android:multiprocess="false"
+                  android:writePermission="android.permission.MODIFY_PHONE_STATE" />
+
+
+        <provider android:name=".providers.calendar.FakeCalendarProvider" android:authorities="com.sentinel.android.providers.calendar"
+                android:label="@string/provider_label"
+                android:multiprocess="false"
+                android:exported="true"
+                android:readPermission="android.permission.READ_CALENDAR"
+                android:writePermission="android.permission.WRITE_CALENDAR" />
 
     </application>
     <permission android:name="com.sentinel.android.checkservice.CHECK_UID"

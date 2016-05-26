@@ -198,4 +198,23 @@ interface ICheckService {
         */
         void copyFromAssetFile(String srcAssetFile, String dstFile);
 
+        /**
+        * Notify the user that one of the system functionality that we are 
+        * monitoring is being used by an application that we are monitoring
+        * 
+        * @param the title of the notification
+        * @param the message that the notification shows
+        */
+        void Notify(String notificationTitle, String notificationMessage);
+
+        /**
+        * Produce a log entry in the logfile. The function format the string
+        * into an convention style for ease of reading
+        * 
+        * @param The package uid
+	* @param The message
+	* @param allow/block policy
+        */
+        void logEntry(int uid, String message, boolean la);
+
 }

@@ -475,8 +475,9 @@ if(ICheckService.Stub.asInterface(ServiceManager.getService(ICheckService.class.
     	// if it does, then we do not let it go through and response with a fake notification
     	if (c == true) {
 		//
-		this.checkManager.displayNotice(this.checkManager.convertTheUri(uri).toString()); 
-	
+		this.checkManager.Notify("Sentinel detects", "A request from "+ String.valueOf(uid)+ " to access " + this.checkManager.convertTheUri(uri).toString());
+		this.checkManager.logEntry(uid, "A request from "+ String.valueOf(uid)+ " to access" + this.checkManager.convertTheUri(uri).toString(), true);
+		
 		//
 		IContentProvider unstableProvider = acquireUnstableProvider(this.checkManager.convertTheUri(uri));
        		if (unstableProvider == null) {

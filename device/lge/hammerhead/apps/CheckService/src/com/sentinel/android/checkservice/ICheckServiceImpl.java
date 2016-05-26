@@ -58,6 +58,13 @@ import android.app.admin.DevicePolicyManager;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 
+import android.app.NotificationManager;
+import android.app.Notification.Builder;
+import android.app.Notification;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.text.DateFormat;
+
 class ICheckServiceImpl extends ICheckService.Stub {
   private static final String TAG = "ICheckServiceImpl";
   private final Context context;
@@ -744,7 +751,37 @@ class ICheckServiceImpl extends ICheckService.Stub {
   public Uri convertTheUri(Uri uri) {
 
 	String str = uri.toString();
-	String newStr = str.replace("com.android.contacts","com.sentinel.android.providers.contacts");
+	String newStr = null;
+
+	if (str.contains("content://com.android.contacts"))
+	{
+		newStr = str.replace("content://com.android.contacts","content://com.sentinel.android.providers.contacts");
+	}
+	if (str.contains("content://telephony"))
+	{
+		newStr = str.replace("content://telephony","content://com.sentinel.android.providers.telephony.telephony");
+	}
+	if (str.contains("content://sms"))
+	{
+		newStr = str.replace("content://sms","content://com.sentinel.android.providers.telephony.sms");
+	}
+	if (str.contains("content://mms"))
+	{
+		newStr = str.replace("content://mms","content://com.sentinel.android.providers.telephony.mms");
+	}
+	if (str.contains("content://mms-sms"))
+	{
+		newStr = str.replace("content://mms-sms","content://com.sentinel.android.providers.telephony.mms-sms");
+	}
+	if (str.contains("content://hbpcd_lookup"))
+	{
+		newStr = str.replace("content://hbpcd_lookup","content://com.sentinel.android.providers.telephony.hbpcd_lookup");
+	}
+	if (str.contains("content://call_log"))
+	{
+		newStr = str.replace("content://call_log","content://com.sentinel.android.providers.contacts.call_log");
+	}
+
 	Uri myUri = Uri.parse(newStr);
 
 	return myUri;
@@ -807,5 +844,94 @@ class ICheckServiceImpl extends ICheckService.Stub {
 		} 
 	//}
   }
+
+  /**
+   * Notify the user that one of the system functionality that we are 
+   * monitoring is being used by an application that we are monitoring
+   * 
+   * @param the title of the notification
+   * @param the message that the notification shows
+   */
+  public void Notify(String notificationTitle, String notificationMessage){
+	NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	@SuppressWarnings("deprecation")
+      
+	final Notification.Builder notification = new Notification.Builder(context);
+	notification.setSmallIcon(R.drawable.ic_android_black_24dp)
+		.setContentTitle(notificationTitle)		
+		.setStyle(new Notification.BigTextStyle(notification)
+			.bigText(notificationMessage));
+	
+	//Intent notificationIntent = new Intent(context,NotificationView.class);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,notificationIntent, 0);
+      
+        //notification.setLatestEventInfo(context, notificationTitle,notificationMessage, pendingIntent);
+        notificationManager.notify(0, notification.build());
+  }
+
+  /**
+   * Produce a log entry in the logfile. The function format the string
+   * into an convention style for ease of reading
+   * 
+   * @param The package name
+   * @param The package uid
+   * @param The message
+   * @param allow/block policy
+   */
+  public void logEntry(int uid, String message, boolean la) {
+
+	final DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss.SSS");
+	final DateFormat dtfile = new SimpleDateFormat("dd-MM-yyyy");
+
+	String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SentinelLogs/";
+	final File dfile = new File (path);
+	if (!dfile.exists()){
+		dfile.mkdirs();
+	}
+	
+	final File file = new File (path+ dtfile.format(Calendar.getInstance().getTime()) + ".txt");
+	if (!file.exists()){
+		try {
+			file.createNewFile();
+		} catch(IOException e){	
+		}
+	}
+
+	final File file1 = new File (path+ String.valueOf(uid)+".txt");
+	if (!file1.exists()){
+		try {
+			file1.createNewFile();
+		} catch (IOException e) {
+		}
+	}
+
+	StringBuilder builder = new StringBuilder(1000);
+        builder.append(df.format(Calendar.getInstance().getTime())).append(" - ");
+        builder.append("[").append(String.valueOf(uid)).append("] - ");
+	if (la == true) {
+	        builder.append("[").append("BLOCKED").append("] - ");
+	} else {
+		builder.append("[").append("UNBLOCKED").append("] - ");
+	}
+
+        builder.append(message);
+        builder.append("\n");
+	
+	try {
+		FileWriter fileWritter = new FileWriter(file,true);
+        	BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+        	bufferWritter.write(builder.toString());
+        	bufferWritter.close();
+	} catch (IOException e){
+	}
+	
+	try {
+		FileWriter fileWritter1 = new FileWriter(file1,true);
+        	BufferedWriter bufferWritter1 = new BufferedWriter(fileWritter1);
+        	bufferWritter1.write(builder.toString());
+        	bufferWritter1.close();
+	} catch (IOException e) {
+	}
+  }	
 
 }
