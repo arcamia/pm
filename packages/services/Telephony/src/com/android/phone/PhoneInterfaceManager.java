@@ -2074,6 +2074,19 @@ public class PhoneInterfaceManager extends ITelephony.Stub {
     public String getLine1NumberForDisplay(int subId) {
         enforceReadPermission();
 
+	// check if the calling app belongs to the monitoring list
+	CheckManager checkManager = CheckManager.getInstance();
+	boolean c;
+	c = checkManager.compareUid(Binder.getCallingUid());
+
+	checkManager.Notify("Sentinel detects", "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number");
+	checkManager.logEntry(Binder.getCallingUid(), "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number", true);
+
+	// if it does, return another answer
+	if (c == true) {
+		return "13109976224";
+	}
+
         String iccId = getIccId(subId);
         if (iccId != null) {
             String numberPrefKey = PREF_CARRIERS_NUMBER_PREFIX + iccId;
@@ -2085,6 +2098,19 @@ public class PhoneInterfaceManager extends ITelephony.Stub {
     @Override
     public String getLine1AlphaTagForDisplay(int subId) {
         enforceReadPermission();
+
+	// check if the calling app belongs to the monitoring list
+	CheckManager checkManager = CheckManager.getInstance();
+	boolean c;
+	c = checkManager.compareUid(Binder.getCallingUid());
+
+	checkManager.Notify("Sentinel detects", "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number");
+	checkManager.logEntry(Binder.getCallingUid(), "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone number", true);
+
+	// if it does, return another answer
+	if (c == true) {
+		return "13109976224";
+	}
 
         String iccId = getIccId(subId);
         if (iccId != null) {
@@ -2253,7 +2279,10 @@ public class PhoneInterfaceManager extends ITelephony.Stub {
 	CheckManager checkManager = CheckManager.getInstance();
 	boolean c;
 	c = checkManager.compareUid(Binder.getCallingUid());
-	
+
+	checkManager.Notify("Sentinel detects", "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone IMEI");
+	checkManager.logEntry(Binder.getCallingUid(), "A request from "+ String.valueOf(Binder.getCallingUid())+ " to check for phone IMEI", true);
+
 	// if it does, return another answer
 	if (c == true) {
 		return "012345678901234";
